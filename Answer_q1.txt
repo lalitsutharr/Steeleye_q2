@@ -1,0 +1,72 @@
+/**
+ * Strips the prefix from the keys of the given key-value pairs
+ * @param {string} htmlContent - HTML content which needs to be highlighted 
+ * @param {string} plainText - This plain text is extracted from htmlContent
+ * @param {array} plainTextPositions - Array of Objects with start and end positions of words in plainText (Not the positions in HTML)
+ * @returns {string} Using the positions in plainText, find the appropriate positions in htmlContent, highlight the content and return it
+ */
+function highlightHTMLContent(htmlContent, plainText, plainTextPositions) {
+  // your logic goes here
+  plainTextPositions.sort((a, b) => {
+    return a.start - b.start;
+});
+  let ans = "";
+  var flag = 0;
+  var ind = 0;
+  var key = 0;
+  for(let i = 0; i<htmlContent.length; i++)
+  {
+    if(htmlContent[i] == '<')
+    {
+      flag = 1;
+      ans+='<';
+      
+      continue;
+    }
+    if(htmlContent[i] == ">")
+    {
+        flag = 0;
+        ans+='>';
+        
+        
+        continue;
+    }
+    if(flag == 0)
+    {
+        while(htmlContent[i] == plainText[ind])
+        {
+            if(key < plainTextPositions.length)
+            {
+                if(ind == plainTextPositions[key].start)
+                {
+                    
+                    ans+="<mark>";
+                    
+                }
+                if(ind == plainTextPositions[key].end)
+                {
+                    
+                    ans+="</mark>";
+                    key++;
+                    
+                }
+            }
+            ans+=htmlContent[i];
+            i++;
+            ind++;
+        }
+        while(plainText[ind] == " ")
+        {
+            ind++;
+            
+        }
+        ans+=htmlContent[i];
+    }
+    else
+    {
+        ans+=htmlContent[i];
+    }
+  }
+  return ans;
+}
+
